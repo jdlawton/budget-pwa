@@ -29,7 +29,7 @@ const FILES_TO_CACHE = [
 self.addEventListener('install', function (e) {
     e.waitUntil(
         caches.open(CACHE_NAME).then(function (cache) {
-            //console.log('installing cache : ' + CACHE_NAME)
+            console.log('installing cache : ' + CACHE_NAME)
             return cache.addAll(FILES_TO_CACHE) //adds all of the files in the above array to the cache
         })
     )
@@ -51,7 +51,7 @@ self.addEventListener('activate', function(e) {
         return Promise.all(
           keyList.map(function(key, i) {
             if (cacheKeeplist.indexOf(key) === -1) {
-              //console.log('deleting cache : ' + keyList[i]);
+              console.log('deleting cache : ' + keyList[i]);
               return caches.delete(keyList[i]);
             }
           })
@@ -64,14 +64,14 @@ self.addEventListener('activate', function(e) {
   //being requested is already cached. If it is, it responds with the info from the cache, if it 
   //has not been cached, it sends the fetch request on to the server like normal.
   self.addEventListener('fetch', function (e) {
-      //console.log('fetch request : ' + e.request.url)
+      console.log('fetch request : ' + e.request.url)
       e.respondWith(
           caches.match(e.request).then(function (request) {
               if (request) {
-                  //console.log('responding with cache: ' + e.request.url);
+                  console.log('responding with cache: ' + e.request.url);
                   return request;
               } else {
-                  //console.log('file is not cached, fetching: ' + e.request.url);
+                  console.log('file is not cached, fetching: ' + e.request.url);
                   return fetch(e.request);
               }
           })
